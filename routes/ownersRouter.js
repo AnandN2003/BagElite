@@ -4,8 +4,9 @@ const ownerModel = require("../models/owner-model");
 
 console.log("NODE_ENV:", process.env.NODE_ENV);
 
-router.get("/",(req,res)=>{
-    res.send("hey what is up!");
+router.get("/admin",(req,res)=>{
+    let success = req.flash("success");
+    res.render("createproducts",{success});
 });
 
 router.delete("/deleteAll", async (req, res) => {
