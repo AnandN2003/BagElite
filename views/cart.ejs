@@ -1,46 +1,89 @@
 <%- include('./partials/header') %>
-    <div class="w-full h-screen flex items-start px-20 py-20 gap-10">
-        <div class="w-[30%] rounded-md overflow-hidden">
-            <div class="w-full h-80 bg-yellow-500"></div>
-            <div class="w-full flex justify-between px-5 py-4">
-                <h3 class="text-2xl">Clinge Bag</h3>
-                <div class="flex items-center gap-2">
-                    <i class="w-7 h-7 bg-white flex rounded-full items-center justify-center ri-add-line"></i>
-                    <div class="px-2 py-1 rounded-md bg-white text-black">01</div>
-                    <i class="w-7 h-7 bg-white flex rounded-full items-center justify-center ri-subtract-line"></i>
-                </div>
-            </div>
-            <div class="flex items-center justify-between px-5 py-3">
-                <h4 class="text-lg">Net Total</h4>
-                <h2 class="text-lg">₹ 1200</h2>
-            </div>
+
+<div class="flex">
+    <!-- Sidebar with Dropdowns -->
+    <aside class="w-1/4 ml-5 bg-gray-100 p-6 rounded-md shadow-md h-screen">
+        <h2 class="text-lg font-semibold mb-4">Filter Options</h2>
+        <!-- Category Filter -->
+        <div class="mb-4">
+            <label for="category" class="block font-medium text-gray-700 mb-2">Category</label>
+            <select id="category" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                <option value="all">All Categories</option>
+                <option value="electronics">Leather</option>
+                <option value="fashion">Cotton</option>
+                <option value="home">Fiber</option>
+            </select>
         </div>
-        <div class="w-[70%]">
-            <h3 class="text-xl">Price Breakdown</h3>
-            <div class="px-10 mt-5">
-                <div class="flex mt-2">
-                    <h4 class="w-1/3">Total MRP</h4>
-                    <h4>₹ 1920</h4>
-                </div>
-                <div class="flex mt-2">
-                    <h4 class="w-1/3">Discount on MRP</h4>
-                    <h4>₹ 0</h4>
-                </div>
-                <div class="flex mt-2">
-                    <h4 class="w-1/3">Platform Fee</h4>
-                    <h4>₹ 20</h4>
-                </div>
-                <div class="flex mt-2">
-                    <h4 class="w-1/3">Shipping Fee</h4>
-                    <h4>FREE</h4>
-                </div>
-            </div>
-            <div class="w-full h-[1px] bg-black mt-10"></div>
-            <div class="flex mt-5">
-                <h3 class="w-1/3 text-xl">Total Amount</h3>
-                <h3 class="font-semibold text-xl text-green-600">₹ 1940</h3>
-            </div>
-            <form action=""></form>
+        <!-- Price Range Filter -->
+        <div class="mb-4">
+            <label for="price-range" class="block font-medium text-gray-700 mb-2">Price Range</label>
+            <select id="price-range" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                <option value="all">All Prices</option>
+                <option value="low">₹ 1000 - ₹ 10000</option>
+                <option value="medium">₹ 10000 - ₹ 30000</option>
+                <option value="high">₹ 30000+</option>
+            </select>
         </div>
-    </div>
-    <%- include('./partials/footer') %>
+        <!-- Sort By -->
+        <div>
+            <label for="sort-by" class="block font-medium text-gray-700 mb-2">Sort By</label>
+            <select id="sort-by" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                <option value="relevance">Relevance</option>
+                <option value="price-low-high">Price: Low to High</option>
+                <option value="price-high-low">Price: High to Low</option>
+                <option value="name">Name (A-Z)</option>
+            </select>
+        </div>
+    </aside>
+
+    <!-- Products Section -->
+    <main class="w-3/4 px-6 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <% user.cart.forEach((item) => { %>
+                <div class="rounded-md overflow-hidden shadow-md">
+                    <!-- Image Container -->
+                    <div class="w-full h-64 flex justify-center items-center bg-[<%= item.bgcolor %>] relative">
+                        <img src="data:image/jpeg;base64,<%=item.image.toString('base64')%>" alt="" class="object-contain max-h-full">
+                    </div>
+                    <!-- Panel Section -->
+                    <div class="w-full flex justify-between px-5 py-4 bg-[<%= item.panelcolor %>] relative z-10">
+                        <h3 class="text-xl"><%= item.name %></h3>
+                        <div class="flex items-center gap-2">
+                            <div class="px-2 py-1 rounded-md bg-white text-black">01</div>
+                        </div>
+                    </div>
+                    <!-- Price Breakdown -->
+                    <div class="bg-gray-800 p-5 text-white">
+                        <h3 class="text-lg font-semibold mb-4">Price Breakdown</h3>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span>Total MRP</span>
+                                <span>₹ <%= item.price %></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Discount on MRP</span>
+                                <span>₹ <%= Number(item.discount) %></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Platform Fee</span>
+                                <span>₹ 20</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Shipping Fee</span>
+                                <span>FREE</span>
+                            </div>
+                            <div class="border-t border-gray-600 my-2 pt-2">
+                                <div class="flex justify-between text-green-400 font-semibold">
+                                    <span>Total Amount</span>
+                                    <span>₹ <%= item.price - Number(item.discount) + 20 %></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    </main>
+</div>
+
+<%- include('./partials/footer') %>

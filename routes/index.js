@@ -25,8 +25,21 @@ router.get("/cart",isLoggedIn,async (req,res)=>{
 router.get("/addtocart/:id",isLoggedIn,async (req,res)=>{
     let user = await userModel.findOne({email : req.user.email});
     user.cart.push(req.params.id);
+    await user.save();
     req.flash("success","added to cart successfully");
     res.redirect("/shop");
+});
+
+router.get("/removefromcart/:id",isLoggedIn,async (req,res)=>{
+        let user = await userModel.findOne({ email: req.user.email });
+        // Find the index of the item to remove
+            const itemIndex = user.cart.indexOf(req.params.id);
+        // Remove the item from the cart if it exists
+            user.cart.splice(itemIndex, 1);
+            await user.save();
+            req.flash("success", "Removed from cart successfully");
+
+        res.redirect("/shop");
 });
 
 module.exports = router;
