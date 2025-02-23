@@ -3,7 +3,7 @@ const config = require("config");
 const dbgr = require("debug")("development:mongoose")
 
 mongoose
-.connect(`${config.get("MONGODB_URI")}/SpinFinity`)
+.connect(`${config.get("MONGODB_URI")}/BagElite`)
 .then(()=>{
     dbgr("connected");
 })
